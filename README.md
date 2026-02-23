@@ -2,6 +2,8 @@
 
 Local speech-to-text for macOS, built on [NVIDIA Parakeet](https://huggingface.co/mlx-community/parakeet-tdt-0.6b-v2) and Apple's [MLX](https://github.com/ml-explore/mlx) framework. Runs on-device. No API keys, no cloud, no subscriptions.
 
+![VoiceInk Architecture](docs/images/architecture.png)
+
 ## Why
 
 If you're paying for a speech-to-text API (Whisper, Google Cloud Speech, etc.), you can stop. Parakeet-TDT 0.6B runs locally on Apple Silicon, transcribes faster than real-time, and the output quality is solid for English.
@@ -9,6 +11,8 @@ If you're paying for a speech-to-text API (Whisper, Google Cloud Speech, etc.), 
 VoiceInk wraps it in a menu bar app with a global hotkey. Press `Option+A`, talk, press `Option+A` again. Transcribed text shows up wherever your cursor is.
 
 ## How it works
+
+![User Flow](docs/images/user-flow.png)
 
 VoiceInk sits in your menu bar. When you press the hotkey, it records from your mic and passes the audio to a Python script (`transcribe.py`) that runs Parakeet through MLX, Apple's ML framework for M-series chips. The transcribed text gets pasted at your cursor position.
 
@@ -81,6 +85,8 @@ Restart VoiceInk after granting permissions (quit from the menu bar icon, then r
 
 A small floating pill shows the current state:
 
+![Pill States](docs/images/pill-states.png)
+
 | Pill state | Meaning |
 |---|---|
 | Red / pulsing | Recording, speak now |
@@ -137,3 +143,39 @@ rm -rf ~/.cache/huggingface/hub/models--mlx-community--parakeet-tdt-0.6b-v2
 The setup script will also clean up the Python environment it created.
 
 If you added VoiceInk to Login Items: System Settings > General > Login Items > remove it.
+
+## Source code
+
+The native app is a Swift Package (no Xcode project required):
+
+```
+Sources/VoiceInk/
+├── main.swift                 # Entry point
+├── AppDelegate.swift          # Orchestrates the full lifecycle
+├── AppState.swift             # State machine (idle → recording → transcribing → done)
+├── HotkeyManager.swift        # CGEventTap for global Option+A detection
+├── AudioRecorder.swift        # AVAudioRecorder → 16kHz mono WAV
+├── TranscriptionService.swift # Spawns Python subprocess for Parakeet
+├── TextOutputService.swift    # Clipboard + CGEvent keyboard injection
+├── FloatingPillWindow.swift   # NSPanel overlay (click-through, visible across all Spaces)
+├── PillView.swift             # SwiftUI pill with animated state indicators
+├── MenuBarController.swift    # Status bar menu and settings
+└── PermissionChecker.swift    # Accessibility + Microphone permission flow
+```
+
+To build from source:
+
+```bash
+swift build -c release
+```
+
+Or use the included scripts:
+
+```bash
+./Scripts/build.sh      # Build release binary
+./Scripts/install.sh    # Build + create ~/Applications/VoiceInk.app
+```
+
+## License
+
+MIT

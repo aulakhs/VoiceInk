@@ -3,6 +3,14 @@ VoiceInk.app
 VoiceInk.app.zip
 _app_tmp/
 
+# Swift
+.build/
+build/
+.swiftpm/
+*.xcodeproj
+xcuserdata/
+DerivedData/
+
 # macOS
 .DS_Store
 __MACOSX/

@@ -79,6 +79,18 @@ PYTHON="$(brew --prefix python@3.13)/bin/python3.13"
 [[ -x "$PYTHON" ]] || fail "Can't find python3.13 after install."
 ok "$($PYTHON --version)"
 
+# ─── FFmpeg ──────────────────────────────────────────────────────────────────
+
+step "FFmpeg"
+
+if brew list ffmpeg &>/dev/null; then
+    ok "Already installed"
+else
+    info "Installing via Homebrew..."
+    brew install ffmpeg
+    ok "Installed"
+fi
+
 # ─── Virtual environment ────────────────────────────────────────────────────
 
 step "Python virtual environment"

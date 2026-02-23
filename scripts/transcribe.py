@@ -13,6 +13,13 @@ import os
 import json
 import time
 
+# Ensure Homebrew binaries (including ffmpeg) are discoverable when launched
+# from a macOS app subprocess, which doesn't inherit the user's shell PATH.
+_brew_dirs = ["/opt/homebrew/bin", "/usr/local/bin"]
+for _d in _brew_dirs:
+    if _d not in os.environ.get("PATH", "").split(":"):
+        os.environ["PATH"] = _d + ":" + os.environ.get("PATH", "")
+
 def main():
     if len(sys.argv) < 2 or sys.argv[1] in ("-h", "--help"):
         print("Usage: transcribe.py <audio_file> [--timestamps] [--json]")
