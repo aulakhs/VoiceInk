@@ -137,11 +137,7 @@ elif [[ -f "$SCRIPT_DIR/VoiceInk.app.zip" ]]; then
     rm -rf "$SCRIPT_DIR/_app_tmp"
 else
     printf "\n"
-    fail "VoiceInk.app not found. Download VoiceInk.app.zip from Google Drive and place it in this folder:
-
-    https://drive.google.com/drive/folders/1LDkdDo17kormaopA4nwYk7_1yg2K7LDQ
-
-    Then run this script again."
+    fail "VoiceInk.app not found. Download VoiceInk.app.zip using the link you were given, place it in this folder, and run this script again."
 fi
 
 # ─── Quarantine ──────────────────────────────────────────────────────────────

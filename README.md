@@ -33,7 +33,7 @@ cd VoiceInk
 
 ### 2. Download VoiceInk.app
 
-Download `VoiceInk.app.zip` from [Google Drive](https://drive.google.com/drive/folders/1LDkdDo17kormaopA4nwYk7_1yg2K7LDQ?usp=drive_link) and drop it into the `VoiceInk` folder you just cloned.
+I'll share the `VoiceInk.app.zip` download link with you directly. Once you have it, download the zip and drop it into the `VoiceInk` folder you just cloned.
 
 > The app binary isn't in this repo because it's a compiled macOS bundle — not the kind of thing that belongs in Git.
 
