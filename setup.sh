@@ -22,6 +22,19 @@ fail()  { printf "${RED}[fail]${NC}  %s\n" "$*"; exit 1; }
 step()  { printf "\n${BOLD}── %s ──${NC}\n" "$*"; }
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+INSTALL_DIR="$INSTALL_DIR"
+
+# ─── Uninstall ───────────────────────────────────────────────────────────────
+
+if [[ "${1:-}" == "--uninstall" ]]; then
+    step "Uninstalling VoiceInk"
+    rm -rf "$HOME/Applications/VoiceInk.app" && ok "Removed VoiceInk.app"
+    rm -rf "$INSTALL_DIR" && ok "Removed Python environment"
+    rm -rf "$HOME/.cache/huggingface/hub/models--mlx-community--parakeet-tdt-0.6b-v2" && ok "Removed cached model"
+    info "If you added VoiceInk to Login Items, remove it in System Settings > General > Login Items."
+    printf "\n${GREEN}${BOLD}VoiceInk has been removed.${NC}\n\n"
+    exit 0
+fi
 
 # ─── Pre-flight ──────────────────────────────────────────────────────────────
 
@@ -70,13 +83,13 @@ ok "$($PYTHON --version)"
 
 step "Python virtual environment"
 
-VENV="$HOME/.openclaw/parakeet-env"
+VENV="$INSTALL_DIR/parakeet-env"
 
 if [[ -f "$VENV/bin/python3" ]]; then
     ok "Already exists at $VENV"
 else
     info "Creating at $VENV..."
-    mkdir -p "$HOME/.openclaw"
+    mkdir -p "$INSTALL_DIR"
     "$PYTHON" -m venv "$VENV"
     ok "Created"
 fi
@@ -98,13 +111,13 @@ fi
 
 step "transcribe.py"
 
-mkdir -p "$HOME/.openclaw/scripts"
+mkdir -p "$INSTALL_DIR/scripts"
 
 if [[ -f "$SCRIPT_DIR/scripts/transcribe.py" ]]; then
-    cp "$SCRIPT_DIR/scripts/transcribe.py" "$HOME/.openclaw/scripts/transcribe.py"
-    chmod +x "$HOME/.openclaw/scripts/transcribe.py"
+    cp "$SCRIPT_DIR/scripts/transcribe.py" "$INSTALL_DIR/scripts/transcribe.py"
+    chmod +x "$INSTALL_DIR/scripts/transcribe.py"
     ok "Installed to ~/.openclaw/scripts/"
-elif [[ -f "$HOME/.openclaw/scripts/transcribe.py" ]]; then
+elif [[ -f "$INSTALL_DIR/scripts/transcribe.py" ]]; then
     ok "Already in place"
 else
     fail "transcribe.py not found in repo or on disk."
@@ -145,7 +158,7 @@ fi
 step "Quarantine cleanup"
 
 xattr -cr "$APP_DEST" 2>/dev/null || true
-xattr -cr "$HOME/.openclaw/scripts/transcribe.py" 2>/dev/null || true
+xattr -cr "$INSTALL_DIR/scripts/transcribe.py" 2>/dev/null || true
 ok "Cleared"
 
 # ─── Model download ─────────────────────────────────────────────────────────

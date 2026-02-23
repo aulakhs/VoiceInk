@@ -127,12 +127,13 @@ A small floating pill shows the current state:
 
 ## Uninstall
 
-The setup script will print the exact paths during install. To remove everything:
+Run `bash setup.sh --uninstall` or manually remove:
 
 ```bash
 rm -rf ~/Applications/VoiceInk.app
-rm -rf ~/.openclaw
 rm -rf ~/.cache/huggingface/hub/models--mlx-community--parakeet-tdt-0.6b-v2
 ```
+
+The setup script will also clean up the Python environment it created.
 
 If you added VoiceInk to Login Items: System Settings > General > Login Items > remove it.
