@@ -98,12 +98,12 @@ A small floating pill shows the current state:
 
 ## Disk footprint
 
-| Component | Size | Location |
-|---|---|---|
-| VoiceInk.app | ~5 MB | `~/Applications/` |
-| Python environment | ~600 MB | `~/.openclaw/parakeet-env/` |
-| Parakeet model | ~1.2 GB | `~/.cache/huggingface/hub/` |
-| **Total** | **~1.8 GB** | |
+| Component | Size |
+|---|---|
+| VoiceInk.app | ~5 MB |
+| Python environment + dependencies | ~600 MB |
+| Parakeet model (cached) | ~1.2 GB |
+| **Total** | **~1.8 GB** |
 
 ## Limitations
 
@@ -127,14 +127,11 @@ A small floating pill shows the current state:
 
 ## Uninstall
 
+The setup script will print the exact paths during install. To remove everything:
+
 ```bash
-# App
 rm -rf ~/Applications/VoiceInk.app
-
-# Python environment and scripts
 rm -rf ~/.openclaw
-
-# Cached ML model (~1.2 GB)
 rm -rf ~/.cache/huggingface/hub/models--mlx-community--parakeet-tdt-0.6b-v2
 ```
 
