@@ -157,7 +157,7 @@ MODEL_DIR="$HOME/.cache/huggingface/hub/models--mlx-community--parakeet-tdt-0.6b
 if [[ -d "$MODEL_DIR" ]]; then
     ok "Already cached"
 else
-    info "Downloading — this is the longest step. Go grab a coffee."
+    info "Downloading the model. This is the longest step."
     "$VENV/bin/python3" -c "
 from parakeet_mlx import from_pretrained
 model = from_pretrained('mlx-community/parakeet-tdt-0.6b-v2')
@@ -187,21 +187,13 @@ fi
 
 step "Done"
 
-cat <<EOF
-
-${GREEN}${BOLD}VoiceInk is ready.${NC}
-
-${BOLD}Next steps:${NC}
-
-  1. Right-click ~/Applications/VoiceInk.app → Open
-     (macOS will warn about an unidentified developer — click Open)
-
-  2. Grant these permissions when prompted:
-     • Accessibility    → System Settings > Privacy & Security > Accessibility
-     • Input Monitoring → System Settings > Privacy & Security > Input Monitoring
-     • Microphone       → System Settings > Privacy & Security > Microphone
-
-  3. Press Option+A to record. Press Option+A again to stop.
-     Text appears wherever your cursor is.
-
-EOF
+printf "\n${GREEN}${BOLD}VoiceInk is ready.${NC}\n"
+printf "\n${BOLD}Next steps:${NC}\n"
+printf "\n  1. Right-click ~/Applications/VoiceInk.app → Open\n"
+printf "     (macOS will warn about an unidentified developer — click Open)\n"
+printf "\n  2. Grant these permissions when prompted:\n"
+printf "     • Accessibility    → System Settings > Privacy & Security > Accessibility\n"
+printf "     • Input Monitoring → System Settings > Privacy & Security > Input Monitoring\n"
+printf "     • Microphone       → System Settings > Privacy & Security > Microphone\n"
+printf "\n  3. Press Option+A to record. Press Option+A again to stop.\n"
+printf "     Text appears wherever your cursor is.\n\n"
