@@ -1,0 +1,12 @@
+# App binary (distributed via Google Drive, not Git)
+VoiceInk.app
+VoiceInk.app.zip
+_app_tmp/
+
+# macOS
+.DS_Store
+__MACOSX/
+
+# Python
+__pycache__/
+*.pyc
