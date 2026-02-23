@@ -1,23 +1,23 @@
 # VoiceInk
 
-Local speech-to-text for macOS, built on [NVIDIA Parakeet](https://huggingface.co/mlx-community/parakeet-tdt-0.6b-v2) and Apple's [MLX](https://github.com/ml-explore/mlx) framework. Runs entirely on-device — no API keys, no cloud, no subscriptions.
+Local speech-to-text for macOS, built on [NVIDIA Parakeet](https://huggingface.co/mlx-community/parakeet-tdt-0.6b-v2) and Apple's [MLX](https://github.com/ml-explore/mlx) framework. Runs on-device. No API keys, no cloud, no subscriptions.
 
 ## Why
 
-If you're paying for a speech-to-text service — OpenAI Whisper API, Google Cloud Speech, Deepgram, or anything else — you probably don't need to. Parakeet-TDT 0.6B runs locally on any Apple Silicon Mac, transcribes faster than real-time, and the quality is genuinely good for English.
+If you're paying for a speech-to-text API (Whisper, Google Cloud Speech, etc.), you can stop. Parakeet-TDT 0.6B runs locally on Apple Silicon, transcribes faster than real-time, and the output quality is solid for English.
 
-VoiceInk wraps it into a menu bar app with a global hotkey. Press `Option+A`, talk, press `Option+A` again — transcribed text appears wherever your cursor is. That's the whole workflow.
+VoiceInk wraps it in a menu bar app with a global hotkey. Press `Option+A`, talk, press `Option+A` again. Transcribed text shows up wherever your cursor is.
 
 ## How it works
 
-VoiceInk lives in your menu bar. When you trigger the hotkey, it records from your mic and hands the audio to a local Python script (`transcribe.py`) that runs Parakeet through MLX — Apple's ML framework built for M-series silicon. The result gets pasted at your cursor.
+VoiceInk sits in your menu bar. When you press the hotkey, it records from your mic and passes the audio to a Python script (`transcribe.py`) that runs Parakeet through MLX, Apple's ML framework for M-series chips. The transcribed text gets pasted at your cursor position.
 
-Everything stays on your machine. The model (~1.2 GB) downloads once during setup and gets cached locally. After that, the entire pipeline works offline.
+Nothing leaves your machine. The model (~1.2 GB) downloads once during setup and gets cached locally. After that, it works offline.
 
 ## Requirements
 
 - macOS 14 (Sonoma) or later
-- Apple Silicon (M1, M2, M3, M4 — any variant)
+- Apple Silicon (M1, M2, M3, M4)
 - A microphone (MacBooks have one built-in; Mac Mini / Studio / Pro need an external mic)
 - ~2 GB of disk space
 - Internet for initial setup only
@@ -35,7 +35,7 @@ cd VoiceInk
 
 I'll share the `VoiceInk.app.zip` download link with you directly. Once you have it, download the zip and drop it into the `VoiceInk` folder you just cloned.
 
-> The app binary isn't in this repo because it's a compiled macOS bundle — not the kind of thing that belongs in Git.
+> The app binary isn't in this repo because it's a compiled macOS bundle, not something that belongs in Git.
 
 ### 3. Run the setup script
 
@@ -43,23 +43,23 @@ I'll share the `VoiceInk.app.zip` download link with you directly. Once you have
 bash setup.sh
 ```
 
-This handles everything: Homebrew, Python 3.13, a virtual environment, the Parakeet speech engine, file placement, quarantine cleanup, and model download. Takes about 5–15 minutes depending on your connection.
+It installs Homebrew, Python 3.13, sets up a virtual environment with parakeet-mlx, places the files where they need to be, and downloads the ML model. Takes 5-15 minutes depending on your connection.
 
-The script is idempotent — run it again if something fails. It picks up where it left off.
+If something fails, run it again. It picks up where it left off.
 
 ### 4. First launch
 
-The app isn't signed with an Apple Developer certificate ($99/year — not worth it for a personal tool), so macOS will block a normal double-click. To get around Gatekeeper:
+The app isn't signed with an Apple Developer certificate ($99/year, not worth it for this), so macOS will block a normal double-click. To get around Gatekeeper:
 
 1. Open Finder and go to `~/Applications`
 2. **Right-click** VoiceInk.app and click **Open**
-3. macOS will warn you about an unidentified developer — click **Open**
+3. macOS will warn you about an unidentified developer. Click **Open**.
 
-This is a one-time thing. After the first launch, it opens normally.
+You only need to do this once.
 
 ### 5. Grant permissions
 
-VoiceInk needs three permissions to function. macOS prompts for each on first launch — grant them all.
+VoiceInk needs three permissions. macOS will prompt for each on first launch.
 
 | Permission | What it's for | Where to enable |
 |---|---|---|
@@ -69,24 +69,24 @@ VoiceInk needs three permissions to function. macOS prompts for each on first la
 
 Toggle VoiceInk **on** for each one. If you don't get a prompt, add it manually from the locations above.
 
-Restart VoiceInk after granting all three (quit from the menu bar, then reopen).
+Restart VoiceInk after granting permissions (quit from the menu bar icon, then reopen).
 
 ## Usage
 
-1. Put your cursor wherever you want text to appear — a document, a text field, a chat window, anything
+1. Put your cursor where you want the text to go
 2. Press **`Option + A`** to start recording
 3. Speak
 4. Press **`Option + A`** again to stop
-5. Wait a beat — transcribed text appears at your cursor
+5. Transcribed text appears at your cursor
 
 A small floating pill shows the current state:
 
 | Pill state | Meaning |
 |---|---|
-| Red / pulsing | Recording — speak now |
+| Red / pulsing | Recording, speak now |
 | Processing | Transcribing your audio |
 | Done | Text has been pasted |
-| Error | Something went wrong — usually a permissions issue |
+| Error | Something went wrong (check permissions) |
 
 ### Output modes
 
@@ -94,7 +94,7 @@ A small floating pill shows the current state:
 |---|---|
 | Smart | Pastes with punctuation and formatting |
 | Paste | Pastes the raw transcription |
-| Paste + Enter | Pastes and presses Enter — useful in Spotlight, chat apps, terminal |
+| Paste + Enter | Pastes and presses Enter. Good for Spotlight, chat apps, terminal |
 
 ## Disk footprint
 
@@ -107,23 +107,23 @@ A small floating pill shows the current state:
 
 ## Limitations
 
-- English only — Parakeet is an English-language model
-- Apple Silicon only — MLX doesn't run on Intel Macs
-- Not signed — requires the right-click bypass on first launch
+- English only
+- Apple Silicon only (MLX requires M-series chips)
+- Not signed, so you need the right-click bypass on first launch
 - Longer recordings take proportionally longer to transcribe
-- First transcription after a reboot is slower (~5s) while the model loads into memory; after that it's fast
+- First transcription after a reboot takes a few seconds while the model loads into memory
 
 ## Troubleshooting
 
 | Problem | Fix |
 |---|---|
-| macOS says the app "can't be opened" | Right-click > Open — see [First launch](#4-first-launch) |
+| macOS says the app "can't be opened" | Right-click > Open. See [First launch](#4-first-launch) |
 | `Option+A` doesn't do anything | Grant Input Monitoring, restart VoiceInk |
 | Records but text doesn't appear | Grant Accessibility, restart VoiceInk |
-| No audio detected | Grant Microphone. If you're on a Mac Mini/Studio/Pro, connect an external mic |
-| First transcription is slow | Normal after a reboot — the model needs to load into memory (~5s) |
-| App quits immediately on launch | Run it from Terminal to see the error: `~/Applications/VoiceInk.app/Contents/MacOS/VoiceInk` |
-| `setup.sh` fails partway through | Check your internet and run it again. It skips steps that already succeeded |
+| No audio detected | Grant Microphone. Mac Mini/Studio/Pro users need an external mic |
+| First transcription is slow | Normal after a reboot. The model loads into memory on first use (~5s) |
+| App quits immediately on launch | Run from Terminal to see the error: `~/Applications/VoiceInk.app/Contents/MacOS/VoiceInk` |
+| `setup.sh` fails partway through | Check your internet and run it again. It skips completed steps |
 
 ## Uninstall
 
